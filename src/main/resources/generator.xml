@@ -7,10 +7,14 @@
 		2.可以引用环境变量: ${env.JAVA_HOME} or System.properties: ${user.home},property之间也可以相互引用
 	</comment>
 	
-	<entry key="basepackage">com.cncounter</entry>
+	<entry key="basepackage">com.lujp.xx1admin</entry>
+
+	<entry key="subpackage">document</entry>
+
+	<entry key="baseUrl">/v1</entry>
 
 	<!-- 子包,只支持单个词 -->
-	<entry key="subpackage">manage</entry>
+	<!--<entry key="subpackage"></entry>-->
 	
 	<!-- jsp namespace: web/${namespace}/${className}/list.jsp -->
 	<entry key="namespace">pages</entry>
@@ -19,13 +23,13 @@
 	<entry key="outRoot">generated-sources</entry>
 
 	<!-- 需要移除的表名前缀,使用逗号进行分隔多个前缀,示例值: t_,v_ -->
-	<entry key="tableRemovePrefixes">T_AR,T_BD,T_CD,T_PD,T_CL,T_IP,T_LO,T_RI,T_EV</entry>
+	<entry key="tableRemovePrefixes"></entry>
 
 	<!-- 需要移除的列名前缀,逗号分隔,示例: S_,I_ -->
-	<entry key="rowRemovePrefixes">S_,B_,I_,DT_,TS_,M_,F_,PK_I_N,PK_I_S</entry>
+	<entry key="rowRemovePrefixes"></entry>
 
 	<!-- 需要忽略的表,逗号分隔,示例: ACT_,BATCH_ -->
-    <entry key="skipTablePrefixes">ACT_,tmp_</entry>
+    <entry key="skipTablePrefixes"></entry>
 
     <entry key="gg.isOverride">true</entry>
 	
@@ -43,10 +47,10 @@
 
 		
 	<!-- Mysql连接,useInformationSchema 取出表名注释 -->
-	<entry key="jdbc.url">jdbc:mysql://localhost:3306/cncounter?useUnicode=true&amp;characterEncoding=utf8&amp;useInformationSchema=true</entry>
+	<entry key="jdbc.url">jdbc:mysql://localhost:3306/xx1?useUnicode=true&amp;characterEncoding=utf8&amp;useInformationSchema=true&amp;useSSL=false</entry>
 	<entry key="jdbc.driver">com.mysql.jdbc.Driver</entry>
 	<entry key="jdbc.username">root</entry>
-	<entry key="jdbc.password">root</entry>
+	<entry key="jdbc.password">yfhx888</entry>
 	
 	
 

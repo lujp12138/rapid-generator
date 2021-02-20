@@ -1,31 +1,19 @@
+<#include "/macro.include"/>
 <#include "/java_copyright.include">
 <#assign className = table.className>   
 <#assign classNameLower = className?uncap_first>
 <#assign shortName = table.shortName>
 package ${basepackage}.${subpackage}.service;
 
-import java.util.List;
-import java.util.Map;
-
-
-import ${basepackage}.${subpackage}.model.${className};
+import com.lujp.xx1admin.base.entity.BaseEntity;
+import com.lujp.xx1admin.base.service.BaseService;
+import ${basepackage}.${subpackage}.entity.${className};
 
 /**
- * @version 1.0
- * @author 
+ * 服务层接口
+ * @author lujp
+ * @date <#if now??>- ${now?string('yyyy-MM-dd')}</#if>
  */
-public interface ${className}Service {
+public interface ${className}Service extends BaseService<${className}Entity> {
 	
-	public int add(${className} ${classNameLower});
-
-	public int update(${className} ${classNameLower});
-    
-	public int delete(Integer id);
-
-	public ${className} getById(Integer id);
-
-	public Integer countBy(Map<String, Object> params);
-
-	public List<${className}> listPage(Map<String, Object> params);
-
 }

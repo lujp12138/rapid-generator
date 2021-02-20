@@ -1,126 +1,64 @@
+<#include "/macro.include"/>
 <#include "/java_copyright.include">
 <#assign className = table.className>
 <#assign classNameLower = className?uncap_first>
+<#assign classNameRest = className?replace("([a-z])([A-Z]+)","$1-$2","r")?lower_case>
 <#assign shortName = table.shortName>
 package ${basepackage}.${subpackage}.controller;
 
-import java.util.*;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.stereotype.RestController;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import ${basepackage}.${subpackage}.mvc.controller.base.ControllerBase;
-import ${basepackage}.util.common.StringNumberUtil;
-import ${basepackage}.${subpackage}.mvc.msg.JSONMessage;
-import ${basepackage}.${subpackage}.model.${className};
+import ${basepackage}.${subpackage}.entity.${className}Entity;
 import ${basepackage}.${subpackage}.service.${className}Service;
 
 /**
- * @version 1.0
- * @author 
+ * 控制器
+ * @author lujp
+ * @date <#if now??>- ${now?string('yyyy-MM-dd')}</#if>
  */
-@Controller
-@RequestMapping("/${subpackage}/${classNameLower}")
-public class ${className}Controller extends ControllerBase {
-    
+@RestController
+public class ${className}Controller{
+
     @Autowired
     private ${className}Service ${classNameLower}Service;
-    
-	@RequestMapping(value = "/list.json")
-	@ResponseBody
-	public JSONMessage list(HttpServletRequest request) {
-		// get params
-		Map<String, Object> params = parseParamMapObject(request);
-        processPageParams(params);
-		//
-		Integer count = ${classNameLower}Service.countBy(params);
-		List<${className}> ${classNameLower}List = ${classNameLower}Service.listPage(params);
-		//
-		JSONMessage jsonMessage = JSONMessage.successMessage();
-		jsonMessage.setTotal(count);
-		jsonMessage.setData(${classNameLower}List);
 
-		return jsonMessage;
+    @ApiOperation("获取列表")
+    @GetMapping("${baseUrl}/${classNameRest}s")
+    public Result list(${className}Entity query){
+		QueryResult<${className}Entity>result=${classNameLower}Service.listPage(query);
+		return Result.success(result);
 	}
 
-	@RequestMapping(value = "/add.json", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONMessage doAdd(HttpServletRequest request) {
-		// get params
-		Map<String, Object> params = parseParamMapObject(request);
-		//
-		${className} ${classNameLower} = new ${className}();
-		//
-		map2Bean(params, ${classNameLower});
-		//
-		
-		//
-		JSONMessage jsonMessage = JSONMessage.failureMessage();
-        try{
-			Integer rows = ${classNameLower}Service.add(${classNameLower});
-            if(rows > 0){
-                jsonMessage = JSONMessage.successMessage();
-            }
-        } catch(Exception ex){
-            logger.error("操作失败",ex);
-        }
-		return jsonMessage;
+    @ApiOperation("根据id获取详情")
+    @GetMapping("${baseUrl}/${classNameRest}s/{id}")
+    public AjaxResult info(@PathVariable("id") @ApiParam("id") String id){
+		${className}Entity entity=${classNameLower}Service.getById(id);
+		return Result.success(entity);
+    }
+
+    @ApiOperation("新增数据")
+    @Transactional
+    @PostMapping("${baseUrl}/${classNameRest}s")
+    public AjaxResult add(@RequestBody ${className}Entity ${classNameLower}){
+		EntityUtil.initBaseEntity(${classNameLower});
+		${classNameLower}Service.save(${classNameLower});
+		return Result.success(${classNameLower});
+    }
+
+    @ApiOperation("修改数据")
+    @Transactional
+    @PutMapping("${baseUrl}/${classNameRest}s")
+    public AjaxResult update(@RequestBody ${className}Entity ${classNameLower}){
+		EntityUtil.initUpdateEntity(${classNameLower});
+		${classNameLower}Service.updateThrow(${classNameLower});
+		return Result.success(${classNameLower});
+    }
+
+	@ApiOperation("根据id批量删除")
+	@Transactional
+	@DeleteMapping("${baseUrl}/${classNameRest}s")
+	public AjaxResult deleteByIds(@RequestBody List<String> ids){
+
 	}
-	
-
-	@RequestMapping(value = "/edit.json", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONMessage doEdit(HttpServletRequest request) {
-		// get params
-		Map<String, Object> params = parseParamMapObject(request);
-		//
-		${className} ${classNameLower} = new ${className}();
-		//
-		map2Bean(params, ${classNameLower});
-		//
-
-		//
-		JSONMessage jsonMessage = JSONMessage.failureMessage();
-        try{
-			Integer rows = ${classNameLower}Service.update(${classNameLower});
-            if(rows > 0){
-                jsonMessage = JSONMessage.successMessage();
-            }
-        } catch(Exception ex){
-            logger.error("操作失败",ex);
-        }
-		return jsonMessage;
-	}
-	
-
-	@RequestMapping(value = "/delete.json", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONMessage delete(HttpServletRequest request) {
-		// get params
-		Map<String, Object> params = parseParamMapObject(request);
-		//
-		Integer id = 0;
-		Object _id = params.get("id");
-		if(null != _id && StringNumberUtil.isLong(_id.toString())){
-			id = StringNumberUtil.parseInt(_id.toString(), 0);
-		}
-		//
-		JSONMessage jsonMessage = JSONMessage.failureMessage();
-        try{
-			Integer rows = ${classNameLower}Service.delete(id);
-            if(rows > 0){
-                jsonMessage = JSONMessage.successMessage();
-            }
-        } catch(Exception ex){
-            logger.error("操作失败",ex);
-        }
-		return jsonMessage;
-	}
-
 }
